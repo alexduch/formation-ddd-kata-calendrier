@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
-class CalendrierTest {
+class CalendrierLunchBreakTest {
 
   @Test
   void shouldNotAddEvent() {

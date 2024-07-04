@@ -13,4 +13,9 @@ public class Evennement {
     this.fin = fin;
   }
 
+  public boolean conflictsWith(Evennement other) {
+    return (fin.isAfter(other.debut) && fin.isBefore(other.fin))
+        || (debut.isBefore(other.fin) && debut.isAfter(other.debut))
+        || (other.debut.isAfter(this.debut) && other.fin.isBefore(this.fin));
+  }
 }
