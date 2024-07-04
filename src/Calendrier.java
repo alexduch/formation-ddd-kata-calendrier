@@ -13,16 +13,24 @@ public class Calendrier {
   public static final LocalTime SEIZE_HEURE = LocalTime.of(16, 0);
   IdEmploye idEmploye;
   List<Evennement> evennements = new ArrayList<>();
+  BankHolidays bankHolidays;
 
-  public void add(Evennement evennement) {
+  public Calendrier(BankHolidays bankHolidays) {
+    this.bankHolidays = bankHolidays;
+  }
+
+  public SchedulingStatus add(Evennement evennement) {
+    if (evennement.isOnBankHoliday(bankHolidays)) {
+      return new SchedulingStatus(false, "Holiday");
+    }
     if (evennements.stream().anyMatch(evennement::conflictsWith)){
-      throw new RuntimeException("Conflict");
+      return new SchedulingStatus(false,"Conflict");
     }
 
-    if (evennement.fin.isBefore(LocalTime.of(11, 0)) || evennement.debut.isAfter(LocalTime.of(16, 0))) {
+    if (evennement.fin.isBefore(ONZE_HEURES) || evennement.debut.isAfter(SEIZE_HEURE)) {
       evennements.add(evennement);
       evennements.sort(Comparator.comparing(e -> e.debut));
-      return;
+      return new SchedulingStatus(true, null);
     }
 
     List<Evennement> all = new ArrayList<>();
@@ -32,10 +40,10 @@ public class Calendrier {
       Evennement current = all.get(i);
       Evennement next = all.get(i+1);
       if (Duration.between(current.fin, next.debut).compareTo(Duration.ofMinutes(90)) < 0) {
-        throw new RuntimeException();
+        return new SchedulingStatus(false, "Lunch break");
       }
     }
     evennements.add(evennement);
-
+    return new SchedulingStatus(true, null);
   }
 }
