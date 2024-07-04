@@ -23,4 +23,20 @@ public class Evennement {
   public boolean isOnBankHoliday(BankHolidays bankHolidays) {
     return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY || bankHolidays.isBankHoliday(date);
   }
+
+  public boolean startAfter(LocalTime localTime) {
+    return debut.isAfter(localTime);
+  }
+
+  public boolean endsBefore(LocalTime localTime) {
+    return fin.isBefore(localTime);
+  }
+
+  public boolean startBefore(LocalTime localTime) {
+    return debut.isBefore(localTime);
+  }
+
+  public boolean endsAfter(LocalTime localTime) {
+    return fin.isAfter(localTime);
+  }
 }
